@@ -2,14 +2,14 @@ from DmxPy import DmxPy
 import RPi.GPIO as GPIO
 import time
 
-button_pin = 3
+button_pin = 26
 light_r= 23
 dmx_r = 24
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(light_r, GPIO.OUT)
 GPIO.setup(dmx_r, GPIO.OUT)
-GPIO.setup(button_pin,GPIO.IN,pull_up_down=GPIO.PUD_UP)
+GPIO.setup(button_pin,GPIO.IN)
 
 dmx = DmxPy('/dev/ttyUSB0')
 
