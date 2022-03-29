@@ -2,6 +2,7 @@ from DmxPy import DmxPy
 import RPi.GPIO as GPIO
 import time
 import pygame
+import os
 
 button_pin = 26
 relay_1= 23
@@ -17,14 +18,23 @@ GPIO.setup(button_pin,GPIO.IN,pull_up_down=GPIO.PUD_UP)
 dmx = DmxPy('/dev/ttyUSB0')
 pygame.mixer.init()
 
-def restore():
+#helper function for running commands and getting a response
+def cmd(input):
+    output = os.system(input)
+    print(input + " ran with exit code %d" % output)
+
+#settings to set the room back to non disco mode
+#kills all music and resets dmx
+def restore(): 
     dmx.blackout()
     dmx.render()
+    set_relays(1)
     pygame.mixer.music.stop()
     pygame.mixer.music.unload()
+    #todo:restore mic 
 
-
-def set_dmx(scene):
+#allows switching and setting of dmx scenes
+def set_dmx(scene): 
     if scene == 1:
         print("enable Scene1 dmx")
         dmx.setChannel(1,255)
@@ -36,20 +46,19 @@ def set_dmx(scene):
     if scene == 2: 
         print("enable Scene2 dmx")
 
-def set_relays(state): #1 turns main lights on 
+#simplifies gpio relay control
+def set_relays(state): 
     if state:
-        GPIO.output(relay_1, GPIO.LOW)
+        GPIO.output(relay_1, GPIO.LOW) #room lights on
         GPIO.output(relay_2, GPIO.HIGH)
     else:
         GPIO.output(relay_1, GPIO.HIGH)
         GPIO.output(relay_2, GPIO.LOW)
 
-def set_scene(scene):
-    #kill lights 
-    #delay an ammount 
-    
 
-    #turn on lights based on numebr of taps 
+#Runs the disco sequences
+def set_state(scene):
+
     set_lights(scene)
 
     if scene == 1:
@@ -66,18 +75,22 @@ def set_scene(scene):
         pygame.mixer.music.play(1)
 
 
-## while statement runs the code 
+## while statement runs in a loop waiting for button press
+
+
+
 while True: 
+    restore()
 
     if GPIO.input(button_pin) == 0: 
 
         if running: 
             running = False
             restore()
-            set_relays(1)
+            
 
         else:
-            restore()
+            
             set_relays(0)
             running = True
 
