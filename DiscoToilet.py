@@ -6,6 +6,7 @@ button_pin = 3
 light_r= 23
 dmx_r = 24
 
+GPIO.setmode(GPIO.BOARD)
 GPIO.setup(light_r, GPIO.OUT)
 GPIO.setup(dmx_r, GPIO.OUT)
 GPIO.setup(button_pin,GPIO.IN,pull_up_down=GPIO.PUD_UP)
