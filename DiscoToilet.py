@@ -9,4 +9,8 @@ def rest_lights():
 def: turn_on_lights(n_taps):
     //turn on lights based on numebr of taps 
 
-def: 
+def: main()
+
+
+while true:
+    
