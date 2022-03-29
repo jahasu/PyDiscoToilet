@@ -27,6 +27,7 @@ while True:
     if GPIO.input(button_pin) == 0 :
         print("Pin High")
         turn_on_lights(1)
+        break
     else:
         print("looping")
 
