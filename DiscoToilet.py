@@ -16,10 +16,11 @@ def rest_lights():
     dmx.blackout()
     dmx.render()
 
-def turn_on_lights(scene):
-    #turn on lights based on numebr of taps 
-    if scene == 1:
-    if scene == 2:
+# def turn_on_lights(scene):
+#     #turn on lights based on numebr of taps 
+#     if scene == 1:
+
+#     if scene == 2:
 
 while True:
     if GPIO.input(button_pin) == 0 :
