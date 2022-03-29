@@ -17,7 +17,7 @@ def rest_lights():
     dmx.render()
 
 def turn_on_lights(scene):
-    //turn on lights based on numebr of taps 
+    #turn on lights based on numebr of taps 
     if scene == 1:
     if scene == 2:
 
