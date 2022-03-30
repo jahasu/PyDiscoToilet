@@ -2,14 +2,15 @@ from DmxPy import DmxPy
 import RPi.GPIO as GPIO
 import time
 import pygame
-import os
+import soco
+from soco.discovery import by_name
+
 
 button_pin = 26
 relay_1= 23
 relay_2 = 24
-
-running = 0
-
+running = False
+sonosVol = 10 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(relay_1, GPIO.OUT)
 GPIO.setup(relay_2, GPIO.OUT)
@@ -18,6 +19,11 @@ GPIO.setwarnings(False)
 
 dmx = DmxPy('/dev/ttyUSB0')
 pygame.mixer.init()
+
+#soco setup
+sonos = soco.by_name("Bathroom")
+print("Sonos connected!" + sonos)
+
 
 
 #simplifies gpio relay control
@@ -29,10 +35,6 @@ def set_relays(state):
         GPIO.output(relay_1, GPIO.HIGH)
         GPIO.output(relay_2, GPIO.LOW)
 
-#helper function for running commands and getting a response
-def cmd(input):
-    output = os.system(input)
-    print(input + " ran with exit code %d" % output)
 
 #settings to set the room back to non disco mode
 #kills all music and resets dmx
@@ -88,13 +90,18 @@ while True:
     if GPIO.input(button_pin) == 0: 
 
         if running:
+            #stop running the shit 
             time.sleep(1)
             running = False
             restore()
+            sonos.volume = sonosVol
             
 
         else:
-            
+            #run all the shit 
+            sonosVol = sonos.volume
+            sonos.volume = 0
+            #get current sonos vol
             set_relays(0)
             time.sleep(1)
             running = True
